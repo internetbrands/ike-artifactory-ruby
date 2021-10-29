@@ -12,13 +12,13 @@ class ClientFunctionalTest < Minitest::Test
     )
   end
 
-  def test_get_days_old_get_days_old_is_integer
-    result = @artifactory.get_days_old '/ib'
+  def test_get_object_age_get_days_old_is_integer
+    result = @artifactory.get_object_age '/ib'
     assert_instance_of Integer, result
   end
 
-  def test_get_days_old_get_days_old_value
-    result = @artifactory.get_days_old '/ib'
+  def test_get_object_age_get_days_old_value
+    result = @artifactory.get_object_age '/ib'
     assert result > 120
   end
 
@@ -43,4 +43,3 @@ class ClientFunctionalTest < Minitest::Test
   end
 
 end
-

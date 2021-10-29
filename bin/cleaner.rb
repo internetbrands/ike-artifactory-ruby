@@ -56,7 +56,7 @@ apps.each do |app|
     repo_key: repo_key,
     folder: app,
     days_old: days_to_keep,
-    images_exclude_list: images_to_keep[app],
+    tags_to_exclude: images_to_keep[app],
     user: user,
     password: password,
     most_recent_images: most_recent_images_to_keep

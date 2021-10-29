@@ -8,7 +8,7 @@ class UnitTestDockerCleaner < Minitest::Test
       repo_key: 'avvo-docker-local',
       folder: 'avvo/amos',
       days_old: 30,
-      images_exclude_list: %w[fake1 fake2],
+      tags_to_exclude: %w[fake1 fake2],
       user: 'user',
       password: 'password',
       most_recent_images: 10
@@ -31,8 +31,8 @@ class UnitTestDockerCleaner < Minitest::Test
     assert @artifactory.days_old == 30
   end
 
-  def test_images_exclude_list
-    assert @artifactory.images_exclude_list == %w[fake1 fake2]
+  def test_tags_to_exclude
+    assert @artifactory.tags_to_exclude == %w[fake1 fake2]
   end
 
   def test_repo_host_attribute
@@ -55,9 +55,9 @@ class UnitTestDockerCleaner < Minitest::Test
     assert @artifactory.respond_to? :days_old=
   end
 
-  def test_images_exclude_list_attribute
-    assert @artifactory.respond_to? :images_exclude_list
-    assert @artifactory.respond_to? :images_exclude_list=
+  def test_tags_to_exclude_attribute
+    assert @artifactory.respond_to? :tags_to_exclude
+    assert @artifactory.respond_to? :tags_to_exclude=
   end
 end
 
@@ -69,7 +69,7 @@ class UnitTestDockerCleanerMethods < Minitest::Test
       repo_key: 'avvo-docker-local',
       folder: 'avvo/amos',
       days_old: 30,
-      images_exclude_list: %w[fake-x fake-y],
+      tags_to_exclude: %w[fake-x fake-y],
       user: 'user',
       password: 'password',
       most_recent_images: 2
@@ -96,7 +96,7 @@ class UnitTestDockerCleanerMethods < Minitest::Test
                              ['fake']
 
     @docker_cleaner.client.stub :get_images, { 'fake' => 3 } do
-      @docker_cleaner.images_exclude_list.stub :include?, mock_exclude_list do
+      @docker_cleaner.tags_to_exclude.stub :include?, mock_exclude_list do
         @docker_cleaner.cleanup!
       end
     end
@@ -109,7 +109,7 @@ class UnitTestDockerCleanerMethods < Minitest::Test
       repo_key: 'avvo-docker-local',
       folder: 'avvo/amos',
       days_old: 30,
-      images_exclude_list: %w[fake-x fake-y],
+      tags_to_exclude: %w[fake-x fake-y],
       user: 'user',
       password: 'password',
       most_recent_images: 2,

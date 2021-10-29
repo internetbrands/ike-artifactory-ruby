@@ -9,7 +9,7 @@ module IKE
       attr_accessor :repo_key
       attr_accessor :folder
       attr_accessor :days_old
-      attr_accessor :images_exclude_list
+      attr_accessor :tags_to_exclude
 
       attr_reader :client  # is not tested
       attr_reader :most_recent_images  # is not tested
@@ -17,14 +17,14 @@ module IKE
       attr_reader :actually_delete
 
       def initialize(repo_host:, repo_key:, folder:, days_old:,
-                     images_exclude_list:, user:, password:, most_recent_images:,
+                     tags_to_exclude:, user:, password:, most_recent_images:,
                      log_level: ::Logger::INFO, actually_delete: false)
 
         @repo_host = repo_host
         @repo_key = repo_key
         @folder = folder
         @days_old = days_old
-        @images_exclude_list = images_exclude_list
+        @tags_to_exclude = tags_to_exclude || []
         @most_recent_images = most_recent_images
 
         @actually_delete = actually_delete
@@ -52,7 +52,7 @@ module IKE
 
           logger.debug "#{logger_prefix}: examining #{tag}"
 
-          if images_exclude_list.include?(tag)
+          if tags_to_exclude.include?(tag)
             logger.info "#{logger_prefix}: tag #{tag} is explicitly excluded from cleanup"
             next
           end
