@@ -1,5 +1,5 @@
 
-TEST_SERVER = 'ike-docker-local.artifactory.internetbrands.com'
+TEST_SERVER = 'https://artifactory.internetbrands.com'
 TEST_REPO_KEY = 'ike-docker-local'
 TEST_FOLDER_PATH = 'ib'
 TEST_USER = ENV['TEST_USER']

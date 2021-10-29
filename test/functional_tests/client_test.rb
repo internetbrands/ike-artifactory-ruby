@@ -7,26 +7,18 @@ class ClientFunctionalTest < Minitest::Test
     @artifactory = IKE::Artifactory::Client.new(
       :server => TEST_SERVER,
       :repo_key => TEST_REPO_KEY,
-      :folder_path => TEST_FOLDER_PATH,
       :user => TEST_USER,
       :password => TEST_PASSWORD
     )
   end
 
-  def test_setup_attributes
-    artifactory = IKE::Artifactory::Client.new()
-    artifactory.server = TEST_SERVER
-    artifactory.repo_key = TEST_REPO_KEY
-    artifactory.folder_path = TEST_FOLDER_PATH
-  end
-
-  def test_get_days_old_get_days_old_is_integer
-    result = @artifactory.get_days_old '/ib'
+  def test_get_object_age_get_days_old_is_integer
+    result = @artifactory.get_object_age '/ib'
     assert_instance_of Integer, result
   end
 
-  def test_get_days_old_get_days_old_value
-    result = @artifactory.get_days_old '/ib'
+  def test_get_object_age_get_days_old_value
+    result = @artifactory.get_object_age '/ib'
     assert result > 120
   end
 
@@ -41,7 +33,7 @@ class ClientFunctionalTest < Minitest::Test
   end
 
   def test_get_directories
-    result = @artifactory.get_directories '/ib'
+    result = @artifactory.get_subdirectories '/ib'
 
     assert_includes result, 'ship-it'
     assert_includes result, 'ruby-testing'
@@ -51,4 +43,3 @@ class ClientFunctionalTest < Minitest::Test
   end
 
 end
-
