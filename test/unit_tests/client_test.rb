@@ -91,7 +91,6 @@ class UnitTestClientMethods < Minitest::Test
       artifactory = IKE::Artifactory::Client.new(**{
         :server => TEST_SERVER,
         :repo_key => TEST_REPO_KEY,
-        :folder_path => TEST_FOLDER_PATH,
         :user => TEST_USER
       })
     end
@@ -103,7 +102,6 @@ class UnitTestClientMethods < Minitest::Test
       artifactory = IKE::Artifactory::Client.new(**{
         :server => TEST_SERVER,
         :repo_key => TEST_REPO_KEY,
-        :folder_path => TEST_FOLDER_PATH
       })
     end
     assert_equal('Required attributes are missing. IKEArtifactoryGem not ready.', exception.message)
@@ -113,8 +111,8 @@ class UnitTestClientMethods < Minitest::Test
     exception = assert_raises IKE::Artifactory::IKEArtifactoryClientNotReady do
       artifactory = IKE::Artifactory::Client.new(**{
         :repo_key => TEST_REPO_KEY,
-        :folder_path => TEST_FOLDER_PATH,
-        :api_token => TEST_API_TOKEN
+        :user => TEST_USER,
+        :password => TEST_PASSWORD
       })
     end
     assert_equal('Required attributes are missing. IKEArtifactoryGem not ready.', exception.message)
