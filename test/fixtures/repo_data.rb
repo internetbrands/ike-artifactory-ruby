@@ -1,7 +1,6 @@
 
-TEST_SERVER = 'https://artifactory.internetbrands.com'
-TEST_REPO_KEY = 'ike-docker-local'
-TEST_FOLDER_PATH = 'ib'
-TEST_USER = ENV['TEST_USER']
-TEST_PASSWORD = ENV['TEST_PASSWORD']
-TEST_API_TOKEN = ENV['TEST_API_TOKEN']
+TEST_SERVER = 'https://artifactory.example.com'
+TEST_REPO_KEY = 'example-docker-local'
+TEST_FOLDER_PATH = 'folder'
+TEST_USER = 'fake-user'
+TEST_PASSWORD = 'superpassword'

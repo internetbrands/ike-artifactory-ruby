@@ -13,33 +13,66 @@ class ClientFunctionalTest < Minitest::Test
   end
 
   def test_get_object_age_get_days_old_is_integer
-    result = @artifactory.get_object_age '/ib'
-    assert_instance_of Integer, result
+    mock_response = Minitest::Mock.new
+    mock_response.expect :code, 200
+    mock_response.expect :to_str, '{ "lastModified": "2021-05-20T15:27:21.592-07:00" }'
+    RestClient::Request.stub :execute,
+                             nil,
+                             [mock_response, 'fake-request', 'fake-result'] do
+      result = @artifactory.get_object_age '/fake-folder'
+      assert_instance_of Integer, result
+    end
   end
 
   def test_get_object_age_get_days_old_value
-    result = @artifactory.get_object_age '/ib'
-    assert result > 120
+    mock_response = Minitest::Mock.new
+    mock_response.expect :code, 200
+    mock_response.expect :to_str, '{ "lastModified": "2021-05-20T15:27:21.592-07:00" }'
+    RestClient::Request.stub :execute,
+                             nil,
+                             [mock_response, 'fake-request', 'fake-result'] do
+      result = @artifactory.get_object_age '/fake-folder'
+      assert result > 120
+    end
   end
 
   def test_get_object_info_returns_a_hash
-    result = @artifactory.get_object_info '/ib/syncer'
-    assert_instance_of Hash, result
+    mock_response = Minitest::Mock.new
+    mock_response.expect :code, 200
+    mock_response.expect :to_str, '{ "lastModified": "2021-05-20T15:27:21.592-07:00" }'
+    RestClient::Request.stub :execute,
+                             nil,
+                             [mock_response, 'fake-request', 'fake-result'] do
+      result = @artifactory.get_object_info '/fake-folder'
+      assert_instance_of Hash, result
+    end
   end
 
   def test_get_object_info_contains_created_by
-    result = @artifactory.get_object_info '/ib/syncer'
-    assert_includes(result.keys, 'createdBy')
+    mock_response = Minitest::Mock.new
+    mock_response.expect :code, 200
+    mock_response.expect :to_str, '{ "lastModified": "2021-05-20T15:27:21.592-07:00", "createdBy": "fake-dev"}'
+
+    RestClient::Request.stub :execute,
+                             nil,
+                             [mock_response, 'fake-request', 'fake-result'] do
+      result = @artifactory.get_object_info '/fake-folder'
+      assert_includes(result.keys, 'createdBy')
+    end
   end
 
   def test_get_directories
-    result = @artifactory.get_subdirectories '/ib'
+    mock_response = Minitest::Mock.new
+    mock_response.expect :code, 200
+    mock_response.expect :to_str, '{ "children": [{"uri": "/fake-folder-1", "folder": true}, {"uri": "/fake-folder-2", "folder": true}, {"uri": "/fake-folder-3", "folder": true}]}'
 
-    assert_includes result, 'ship-it'
-    assert_includes result, 'ruby-testing'
-    assert_includes result, 'centos'
-    assert_includes result, 'fedora'
-    assert_instance_of Array, result
+    RestClient::Request.stub :execute,
+                             nil,
+                             [mock_response, 'fake-request', 'fake-result'] do
+      result = @artifactory.get_subdirectories '/fake-folder'
+      assert_includes result, 'fake-folder-1'
+      assert_includes result, 'fake-folder-2'
+      assert_includes result, 'fake-folder-3'
+    end
   end
-
 end
