@@ -3,9 +3,9 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      TEST_USER: avvo-devs
-      TEST_PASSWORD: fake-password
+    strategy:
+      matrix:
+        ruby-version: ['2.6', '2.7', '3.0']
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -23,3 +23,27 @@ jobs:
           bundler install
           bundle exec rake test
       - run: echo "🍏 This job's status is ${{ job.status }}."
+
+  build:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - run: echo "Building gem"
+      - name: Build the gem
+        run: |
+          rm -f *.gem
+          gem build $(ls *.gemspec)
+      - run: echo "Pushing the gem to rubygems.org"
+      - name: Push the gem 
+        env:
+          RUBYGEMS_API_TOKEN: ${{ secrets.RUBYGEMS_API_TOKEN }}
+        run: |
+          mkdir -p ~/.gem
+          echo -e "---\n:rubygems_api_key: $RUBYGEMS_API_TOKEN" >> ~/.gem/credentials
+          chmod 0600 ~/.gem/credentials
+          gem push $(ls *.gem)
+ 
