@@ -1,5 +1,7 @@
 # IKE Artifactory
 
+![Build](https://github.com/internetbrands/ike-artifactory-ruby/actions/workflows/ike-artifactory-test.yml/badge.svg)
+
 This gem provides an object-oriented interface to Artifactory API for managing objects in Artfactory,
 particularly for cleaning up old Docker images.
 

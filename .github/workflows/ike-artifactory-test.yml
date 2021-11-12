@@ -3,9 +3,9 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      TEST_USER: avvo-devs
-      TEST_PASSWORD: fake-password
+    strategy:
+      matrix:
+        ruby-version: ['2.6', '2.7', '3.0']
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -22,4 +22,65 @@ jobs:
           gem install bundler
           bundler install
           bundle exec rake test
+      - name: Upload coverage results
+        uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage
+      - name: Upload tests results
+        uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: test-report
+          path: test/html_reports
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - name: 💡 Linting the code
+        run: |
+          gem install rubocop
+          rubocop --format github --fail-level F || true
+          rubocop --format html -o rubocop.html  --fail-level F || true
+      - name: Upload linting results
+        uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: linting-report
+          path: rubocop.html
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+  build:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - name: Check Tag
+        id: check-tag
+        run: |
+          if [[ ${{ github.event.ref }} =~ ^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+\.* ]]; then
+              echo ::set-output name=match::true
+          fi
+      - name: Build the gem
+        if: steps.check-tag.outputs.match == 'true'
+        run: |
+          rm -f *.gem
+          gem build $(ls *.gemspec)
+      - name: Push the gem
+        if: steps.check-tag.outputs.match == 'true'
+        env:
+          RUBYGEMS_API_TOKEN: ${{ secrets.RUBYGEMS_API_TOKEN }}
+        run: |
+          mkdir -p ~/.gem
+          echo -e "---\n:rubygems_api_key: $RUBYGEMS_API_TOKEN" >> ~/.gem/credentials
+          chmod 0600 ~/.gem/credentials
+          gem push $(ls *.gem)
       - run: echo "🍏 This job's status is ${{ job.status }}."

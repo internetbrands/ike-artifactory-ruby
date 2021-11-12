@@ -1,7 +1,6 @@
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "ike_artifactory/version"
-
+require 'ike_artifactory/version'
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
@@ -18,5 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rake'
   s.add_dependency 'rest-client'
   s.add_development_dependency 'minitest'
+  s.add_development_dependency 'minitest-reporters'
   s.add_development_dependency 'pry-byebug'
+  s.add_development_dependency 'simplecov'
 end

@@ -1,7 +1,6 @@
-require "test_helper"
+require 'test_helper'
 
-
-TIME_LAST_MODIFIED_MILLISECONDS = (Time.now.to_i - 30*24*60*60) * 1000
+TIME_LAST_MODIFIED_MILLISECONDS = (Time.now.to_i - 30 * 24 * 60 * 60) * 1000
 
 INITIALS_PARAMETERS = {
   :server => TEST_SERVER,
