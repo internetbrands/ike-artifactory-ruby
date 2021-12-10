@@ -3,6 +3,7 @@ require 'json'
 require 'rest-client'
 require 'uri'
 require 'pry-byebug'
+require 'logger'
 
 module IKE
   module Artifactory
@@ -80,6 +81,9 @@ module IKE
         retval = nil # Work around Object#stub stomping on return values
 
         prefix ||= "#{server}/artifactory/api/storage/#{repo_key}"
+        if method == :delete
+          prefix = "#{server}/artifactory/#{repo_key}"
+        end
 
         RestClient::Request.execute(
           :method => method,
