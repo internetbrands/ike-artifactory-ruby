@@ -3,7 +3,6 @@ require 'json'
 require 'rest-client'
 require 'uri'
 require 'pry-byebug'
-require 'logger'
 
 module IKE
   module Artifactory
