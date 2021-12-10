@@ -31,11 +31,6 @@ image_exclude_list = ARGV.shift
 days_to_keep = ARGV.shift.to_i
 most_recent_images_to_keep = ARGV.shift.to_i || 10
 
-
-print "#{artifactory_url}, #{delete_empty_path}, #{actually_delete},"
-
-
-
 if days_to_keep <= 7
   STDERR.puts "Invalid number of days_to_keep: #{days_to_keep}"
   exit 2
