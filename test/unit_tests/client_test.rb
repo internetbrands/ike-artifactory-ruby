@@ -289,7 +289,7 @@ class UnitTestClientMethods < Minitest::Test
     mock_request.expect :call,
                         true,
                         [:method => :delete,
-                         :url =>  "#{@artifactory.server}/artifactory/api/storage/#{@artifactory.repo_key}/fake-object",
+                         :url =>  "#{@artifactory.server}/artifactory/#{@artifactory.repo_key}/fake-object",
                          :user => @artifactory.user, :password => @artifactory.password]
 
     RestClient::Request.stub :execute, mock_request do
