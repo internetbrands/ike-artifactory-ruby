@@ -18,7 +18,7 @@ while ARGV[0] =~ /^--/ do
 end
 
 unless [7,8].include?(ARGV.count)
-  STDERR.puts "Usage: $0 [--actually-delete] artifactory_url repo_key username password application_list image_exclude_list days_to_keep [most_recent_images_to_keep]"
+  STDERR.puts "Usage: $0 [--actually-delete] [--delete-empty-path] artifactory_url repo_key username password application_list image_exclude_list days_to_keep [most_recent_images_to_keep]"
   exit 1
 end
 

@@ -43,7 +43,7 @@ avvo/amos:45a3ddafa0adf7ef8ebf9b7156e4a68aabd4a47a
 
 ```
 # Usage is:
-#   bin/cleaner.rb [--actually-delete] \
+#   bin/cleaner.rb [--actually-delete] [--delete-empty-path] \
 #     artifactory_url \
 #     repo_key \
 #     username \
