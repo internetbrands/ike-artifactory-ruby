@@ -5,13 +5,20 @@ $:.unshift(File.expand_path('../../lib', __FILE__))
 require 'ike_artifactory'
 
 actually_delete = false
-if ARGV[0] == '--actually-delete'
-  ARGV.shift
-  actually_delete = true
+delete_empty_path = false
+while ARGV[0] =~ /^--/ do
+  arg = ARGV.shift
+  if arg == '--actually-delete'
+    actually_delete = true
+  end
+  
+  if arg == '--delete-empty-path'
+    delete_empty_path = true
+  end
 end
 
 unless [7,8].include?(ARGV.count)
-  STDERR.puts "Usage: $0 [--actually-delete] artifactory_url repo_key username password application_list image_exclude_list days_to_keep [most_recent_images_to_keep]"
+  STDERR.puts "Usage: $0 [--actually-delete] [--delete-empty-path] artifactory_url repo_key username password application_list image_exclude_list days_to_keep [most_recent_images_to_keep]"
   exit 1
 end
 
@@ -52,6 +59,7 @@ apps.each do |app|
   puts "Cleaning #{app}"
   cleaner = IKE::Artifactory::DockerCleaner.new(
     actually_delete: actually_delete,
+    delete_empty_path: delete_empty_path,
     repo_host: artifactory_url,
     repo_key: repo_key,
     folder: app,

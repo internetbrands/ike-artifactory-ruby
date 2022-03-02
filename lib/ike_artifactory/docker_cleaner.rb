@@ -15,10 +15,11 @@ module IKE
       attr_reader :most_recent_images  # is not tested
       attr_reader :logger  # is not tested. Used for testing
       attr_reader :actually_delete
+      attr_reader :delete_empty_path
 
       def initialize(repo_host:, repo_key:, folder:, days_old:,
                      tags_to_exclude:, user:, password:, most_recent_images:,
-                     log_level: ::Logger::INFO, actually_delete: false)
+                     log_level: ::Logger::INFO, actually_delete: false, delete_empty_path: false)
 
         @repo_host = repo_host
         @repo_key = repo_key
@@ -27,7 +28,8 @@ module IKE
         @tags_to_exclude = tags_to_exclude || []
         @most_recent_images = most_recent_images
 
-        @actually_delete = actually_delete
+        @actually_delete   = actually_delete
+        @delete_empty_path = delete_empty_path
 
         @client = IKE::Artifactory::Client.new(
           :server => repo_host,
@@ -74,6 +76,14 @@ module IKE
             logger.info("#{logger_prefix}: Not actually deleting #{tag} because actually_delete is falsy")
           end
           deleted_images.append(tag)
+        end
+        if delete_empty_path && deleted_images.length() == tags.length()
+          logger.info "#{logger_prefix}: removing empty path #{folder}"
+          if actually_delete
+            client.delete_object "#{folder}"
+          else
+            logger.info("#{logger_prefix}: Not actually deleting #{folder} because actually_delete is falsy")
+          end
         end
         deleted_images
       end
