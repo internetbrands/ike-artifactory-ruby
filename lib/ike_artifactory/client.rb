@@ -79,10 +79,13 @@ module IKE
       def fetch(path, method: :get, prefix: nil)
         retval = nil # Work around Object#stub stomping on return values
 
-        prefix ||= "#{server}/artifactory/api/storage/#{repo_key}"
-        if method == :delete
-          prefix = "#{server}/artifactory/#{repo_key}"
-        end
+        prefix ||=
+          case method
+          when :delete
+            "#{server}/artifactory/#{repo_key}"
+          else
+            "#{server}/artifactory/api/storage/#{repo_key}"
+          end
 
         RestClient::Request.execute(
           :method => method,
